@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html ng-app="chat">
+<head>
+
+  <meta charset="UTF-8">
+  <title>Live Chat</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script> 
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700">
+    <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+<body ng-controller="chatApp as ctrl">
+  <form ng-show="!ctrl.gotName">
+    <h3>Type your username:</h3>
+    <input class="usernameInput" type="text" maxlength="14" />
+    <input type='text' name="username" id="username" class="form-control" placeholder="Enter Your Name" ng-model="ctrl.username" required> 
+    <button ng-click="ctrl.getUser()">Submit</button>
+  </form>
+
+  <div id="participants" ng-show="ctrl.gotName">
+    <li class="participants" ng-repeat="user in ctrl.users track by $index">
+    <a ng-href="#" ng-click="ctrl.createRoom(user)">{{user}}</a>
+    </li>
+  </div>
+
+  <div id="live-chat" ng-show="ctrl.privateMsg">
+    <!-- <span ng-repeat="msg in ctrl.messageStorage[ctrl.receiver] track by $index"> -->
+    
+    <header class="clearfix" ng-click="ctrl.headerClicked()">
+
+      <a href="#" class="chat-close">x</a>
+
+      <h4>{{ctrl.receiver}}</h4>
+
+    </header>
+
+    <div class="chat" ng-if="ctrl.clicked">
+      
+      <div class="chat-history" ng-repeat="(key, value) in ctrl.messageStorage">
+        
+        <div class="chat-message clearfix">
+
+          <img src="http://lorempixum.com/32/32/people" alt="" width="32" height="32" ng-if="msg[0] == ctrl.username">
+          <img src="http://gravatar.com/avatar/2c0ad52fc5943b78d6abe069cc08f320?s=32" alt="" width="32" height="32" ng-if="msg[1] == ctrl.receiver">
+
+          <div class="chat-message-content clearfix">
+            
+            <span class="chat-time"></span>
+            <ul>
+              <li><h5>{{key}}</h5></li>
+
+              <li>{{value}}</li>
+            </ul>
+          <hr>
+          </div> <!-- end chat-message-content -->
+
+        </div> <!-- end chat-message -->
+
+      </div> <!-- end chat-history -->
+
+      <p class="chat-feedback">typing...</p>
+
+      <form>
+
+        <fieldset>
+          
+          <input type="text" placeholder="Type your message…" autofocus ng-model="ctrl.message">
+          <input type="button" ng-click="ctrl.sendMessage($event)" value="Submit"></input>
+        </fieldset>
+
+      </form>
+
+    </div> <!-- end chat -->
+   </span>
+  </div> <!-- end live-chat -->
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+  
+</body>
+</html>
